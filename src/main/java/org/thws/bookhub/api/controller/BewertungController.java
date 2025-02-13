@@ -1,5 +1,9 @@
 package org.thws.bookhub.api.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.thws.bookhub.domain.model.Bewertung;
 import org.thws.bookhub.domain.service.BewertungService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +32,9 @@ public class BewertungController {
 
     // Alle Bewertungen abrufen (GET)
     @GetMapping
-    public List<Bewertung> getAllBewertungen() {
-        return bewertungService.findAllBewertungen();
+    public ResponseEntity<Page<Bewertung>> getAllBewertungen(Pageable pageable) {
+        Page<Bewertung> bewertungPage = bewertungService.findAllBewertungen(pageable);
+        return new ResponseEntity<>(bewertungPage, HttpStatus.OK);
     }
 
     // 3. Bewertung nach ID abrufen (GET)
@@ -52,8 +57,9 @@ public class BewertungController {
 
     // Bewertungen nach Punktzahl suchen (GET)
     @GetMapping("/by-punktzahl")
-    public List<Bewertung> getBewertungenByPunktzahl(@RequestParam int punktzahl) {
-        return bewertungService.findBewertungenByPunktzahl(punktzahl);
+    public ResponseEntity<Page<Bewertung>> getBewertungenByPunktzahl(@RequestParam int punktzahl, Pageable pageable) {
+        Page<Bewertung> bewertungPage = bewertungService.findBewertungenByPunktzahl(punktzahl, pageable);
+        return new ResponseEntity<>(bewertungPage, HttpStatus.OK);
     }
 
 }

@@ -1,5 +1,10 @@
 package org.thws.bookhub.api.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.thws.bookhub.domain.model.Autor;
 import org.thws.bookhub.domain.model.Buch;
 import org.thws.bookhub.domain.model.Genre;
 import org.thws.bookhub.domain.service.BuchService;
@@ -29,8 +34,9 @@ public class BuchController {
 
     // Alle Bücher abrufen (GET)
     @GetMapping
-    public List<Buch> getAllBuecher() {
-        return buchService.findAllBuecher();
+    public ResponseEntity<Page<Buch>> getAllBuecher(Pageable pageable) {
+        Page<Buch> buchPage = buchService.findAllBuecher(pageable);
+        return new ResponseEntity<>(buchPage, HttpStatus.OK);
     }
 
     // Buch nach ISBN abrufen (GET)
@@ -53,26 +59,30 @@ public class BuchController {
 
     // Bücher nach Titel suchen (GET)
     @GetMapping("/by-titel")
-    public List<Buch> getBuecherByTitel(@RequestParam String titel) {
-        return buchService.findBuecherByTitel(titel);
+    public ResponseEntity<Page<Buch>> getBuecherByTitel(@RequestParam String titel, Pageable pageable) {
+        Page<Buch> buchPage = buchService.findBuecherByTitel(titel, pageable);
+        return new ResponseEntity<>(buchPage, HttpStatus.OK);
     }
 
     // Bücher nach Veröffentlichungsdatum suchen (GET)
     @GetMapping("/by-veroeffentlichungsdatum")
-    public List<Buch> getBuecherByVeroeffentlichungsdatum(@RequestParam LocalDate veroeffentlichungsdatum) {
-        return buchService.findBuecherByVeroeffentlichungsdatum(veroeffentlichungsdatum);
+    public ResponseEntity<Page<Buch>> getBuecherByVeroeffentlichungsdatum(@RequestParam LocalDate veroeffentlichungsdatum, Pageable pageable) {
+        Page<Buch> buchPage = buchService.findBuecherByVeroeffentlichungsdatum(veroeffentlichungsdatum, pageable);
+        return new ResponseEntity<>(buchPage, HttpStatus.OK);
     }
 
     // Bücher nach Genre suchen (GET)
     @GetMapping("/by-genre")
-    public List<Buch> getBuecherByGenre(@RequestParam Genre genre) {
-        return buchService.findBuecherByGenre(genre);
+    public ResponseEntity<Page<Buch>> getBuecherByGenre(@RequestParam Genre genre, Pageable pageable) {
+        Page<Buch> buchPage = buchService.findBuecherByGenre(genre, pageable);
+        return new ResponseEntity<>(buchPage, HttpStatus.OK);
     }
 
     // Bücher nach Seitenanzahl suchen (GET)
     @GetMapping("/by-seitenanzahl")
-    public List<Buch> getBuecherBySeitenanzahl(@RequestParam int seitenanzahl) {
-        return buchService.findBuecherBySeitenanzahl(seitenanzahl);
+    public ResponseEntity<Page<Buch>> getBuecherBySeitenanzahl(@RequestParam int seitenanzahl, Pageable pageable) {
+        Page<Buch> buchPage = buchService.findBuecherBySeitenanzahl(seitenanzahl, pageable);
+        return new ResponseEntity<>(buchPage, HttpStatus.OK);
     }
 
 }

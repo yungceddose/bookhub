@@ -1,5 +1,9 @@
 package org.thws.bookhub.api.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.thws.bookhub.domain.model.Verlag;
 import org.thws.bookhub.domain.service.VerlagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +30,9 @@ public class VerlagController {
 
     // Alle Verlage abrufen (GET)
     @GetMapping
-    public List<Verlag> getAllVerlage() {
-        return verlagService.findAllVerlage();
+    public ResponseEntity<Page<Verlag>> getAllVerlage(Pageable pageable) {
+        Page<Verlag> verlagPage = verlagService.findAllVerlage(pageable);
+        return new ResponseEntity<>(verlagPage, HttpStatus.OK);
     }
 
     // Verlag aktualisieren (PUT)
@@ -50,14 +55,16 @@ public class VerlagController {
 
     // Verlag nach Sitz suchen (GET)
     @GetMapping("/by-sitz")
-    public List<Verlag> getVerlagBySitz(@RequestParam String sitz) {
-        return verlagService.findVerlagBySitz(sitz);
+    public ResponseEntity<Page<Verlag>> getVerlagBySitz(@RequestParam String sitz, Pageable pageable) {
+        Page<Verlag> verlagPage = verlagService.findVerlagBySitz(sitz, pageable);
+        return new ResponseEntity<>(verlagPage, HttpStatus.OK);
     }
 
     // Verlag nach Gründungsjahr suchen (GET)
     @GetMapping("/by-gruendungsjahr")
-    public List<Verlag> getVerlagByGruendungsjahr(@RequestParam Integer gruendungsjahr) {
-        return verlagService.findVerlagByGruendungsjahr(gruendungsjahr);
+    public ResponseEntity<Page<Verlag>> getVerlagByGruendungsjahr(@RequestParam Integer gruendungsjahr, Pageable pageable) {
+        Page<Verlag> verlagPage = verlagService.findVerlagByGruendungsjahr(gruendungsjahr, pageable);
+        return new ResponseEntity<>(verlagPage, HttpStatus.OK);
     }
 
 }

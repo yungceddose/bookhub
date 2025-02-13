@@ -1,5 +1,9 @@
 package org.thws.bookhub.api.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.thws.bookhub.domain.model.Benutzer;
 import org.thws.bookhub.domain.service.BenutzerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +32,9 @@ public class BenutzerController {
 
     // Alle Benutzer abrufen (GET)
     @GetMapping
-    public List<Benutzer> getAllBenutzer() {
-        return benutzerService.getAllBenutzer();
+    public ResponseEntity<Page<Benutzer>> getAllBenutzer(Pageable pageable) {
+        Page<Benutzer> benutzerPage = benutzerService.getAllBenutzer(pageable);
+        return new ResponseEntity<>(benutzerPage, HttpStatus.OK);
     }
 
     // Benutzer nach ID abrufen (GET)
@@ -58,8 +63,9 @@ public class BenutzerController {
 
     // Benutzer nach Name abrufen (GET)
     @GetMapping("/by-name")
-    public List<Benutzer> getBenutzerByName(@RequestParam String name) {
-        return benutzerService.getBenutzerByName(name);
+    public ResponseEntity<Page<Benutzer>> getBenutzerByName(@RequestParam String name, Pageable pageable) {
+        Page<Benutzer> benutzerPage = benutzerService.getBenutzerByName(name, pageable);
+        return new ResponseEntity<>(benutzerPage, HttpStatus.OK);
     }
 
 }

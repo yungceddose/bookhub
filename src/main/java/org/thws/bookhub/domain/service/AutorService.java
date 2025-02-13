@@ -1,6 +1,8 @@
 package org.thws.bookhub.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.thws.bookhub.domain.model.Autor;
 import org.thws.bookhub.persistence.AutorRepository;
@@ -20,8 +22,8 @@ public class AutorService {
     }
 
     // Alle Autoren abrufen
-    public List<Autor> getAllAutoren(){
-        return autorRepository.findAll();
+    public Page<Autor> getAllAutoren(Pageable pageable){
+        return autorRepository.findAllBy(pageable);
     }
 
     // Neuen Autor hinzufügen (Create)
@@ -56,23 +58,23 @@ public class AutorService {
     }
 
     // Autor(en) nach Vorname abrufen
-    public List<Autor> getAutorByVorname(String name){
-        return autorRepository.findByVorname(name);
+    public Page<Autor> getAutorByVorname(String name, Pageable pageable){
+        return autorRepository.findByVorname(name, pageable);
     }
 
     // Autor(en) nach Nachname abrufen
-    public List<Autor> getAutorbyNachname (String name){
-        return autorRepository.findByNachname(name);
+    public Page<Autor> getAutorByNachname (String name, Pageable pageable){
+        return autorRepository.findByNachname(name, pageable);
     }
 
     // Autoren nach Geburtsdatum abrufen
-    public List<Autor> getAutorByGeburtsdatum (LocalDate date){
-        return autorRepository.findByGeburtsdatum(date);
+    public Page<Autor> getAutorByGeburtsdatum (LocalDate date, Pageable pageable){
+        return autorRepository.findByGeburtsdatum(date, pageable);
     }
 
     // Autoren nach Nationalität abrufen
-    public List<Autor> getAutorByNationalitaet (String nationalitaet){
-        return autorRepository.findByNationalitaet(nationalitaet);
+    public Page<Autor> getAutorByNationalitaet (String nationalitaet, Pageable pageable){
+        return autorRepository.findByNationalitaet(nationalitaet, pageable);
     }
 
 

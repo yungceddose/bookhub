@@ -1,4 +1,6 @@
 package org.thws.bookhub.domain.service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.thws.bookhub.domain.model.Bewertung;
 import org.thws.bookhub.persistence.BewertungRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,8 @@ public class BewertungService {
     }
 
     // Alle Bewertungen abrufen
-    public List<Bewertung> findAllBewertungen() {
-        return bewertungRepository.findAll();
+    public Page<Bewertung> findAllBewertungen(Pageable pageable) {
+        return bewertungRepository.findAllBy(pageable);
     }
 
     // Bewertung nach ID abrufen
@@ -47,8 +49,8 @@ public class BewertungService {
     }
 
     // Bewertungen nach Punktzahl suchen
-    public List<Bewertung> findBewertungenByPunktzahl(int punktzahl) {
-        return bewertungRepository.findByPunktzahl(punktzahl);
+    public Page<Bewertung> findBewertungenByPunktzahl(int punktzahl, Pageable pageable) {
+        return bewertungRepository.findByPunktzahl(punktzahl, pageable);
     }
 
 }

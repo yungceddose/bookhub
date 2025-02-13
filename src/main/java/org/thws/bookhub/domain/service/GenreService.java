@@ -1,5 +1,7 @@
 package org.thws.bookhub.domain.service;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.thws.bookhub.domain.model.Genre;
 import org.thws.bookhub.persistence.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,8 @@ public class GenreService {
     }
 
     // Alle Genres abrufen
-    public List<Genre> findAllGenres() {
-        return genreRepository.findAll();
+    public Page<Genre> findAllGenres(Pageable pageable) {
+        return genreRepository.findAllBy(pageable);
     }
 
     // Genre aktualisieren
@@ -44,8 +46,8 @@ public class GenreService {
     }
 
     // Genre nach Name suchen
-    public List<Genre> findGenreByName(String name) {
-        return genreRepository.findByName(name);
+    public Page<Genre> findGenreByName(String name, Pageable pageable) {
+        return genreRepository.findByName(name, pageable);
     }
 
 }

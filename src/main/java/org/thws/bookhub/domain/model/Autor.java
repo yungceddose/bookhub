@@ -1,5 +1,6 @@
 package org.thws.bookhub.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ public class Autor {
     private String nationalitaet;
 
     @OneToMany(mappedBy = "autor")
+    @JsonManagedReference
     private List<Buch> buecher = new ArrayList<>();
 
     // Standard-Konstruktor

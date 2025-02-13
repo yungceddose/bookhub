@@ -1,5 +1,6 @@
 package org.thws.bookhub.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,10 +12,12 @@ public class Bewertung {
 
     @ManyToOne
     @JoinColumn(name = "buch_id")
+    @JsonBackReference
     private Buch buch;
 
     @ManyToOne
     @JoinColumn(name = "benutzer_id")
+    @JsonBackReference
     private Benutzer benutzer;
 
 

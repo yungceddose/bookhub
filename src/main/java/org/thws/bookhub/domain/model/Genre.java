@@ -1,5 +1,6 @@
 package org.thws.bookhub.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class Genre {
     private String name;
 
     @OneToMany(mappedBy = "genre")
+    @JsonManagedReference
     private List<Buch> buecher = new ArrayList<>();
 
 

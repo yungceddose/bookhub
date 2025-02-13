@@ -1,4 +1,6 @@
 package org.thws.bookhub.persistence;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -8,12 +10,15 @@ import org.thws.bookhub.domain.model.Autor;
 
 @Repository
 public interface AutorRepository extends JpaRepository<Autor, Long>{
-    List<Autor> findByVorname(String vorname);
 
-    List<Autor> findByNachname(String nachname);
+    Page<Autor> findAllBy(Pageable pageable);
 
-    List<Autor> findByGeburtsdatum(LocalDate geburtsdatum);
+    Page<Autor> findByVorname(String vorname, Pageable pageable);
 
-    List<Autor> findByNationalitaet(String nationalitaet);
+    Page<Autor> findByNachname(String nachname, Pageable pageable);
+
+    Page<Autor> findByGeburtsdatum(LocalDate geburtsdatum, Pageable pageable);
+
+    Page<Autor> findByNationalitaet(String nationalitaet, Pageable pageable);
 }
 

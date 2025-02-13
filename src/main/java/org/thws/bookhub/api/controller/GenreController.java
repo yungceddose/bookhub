@@ -1,5 +1,9 @@
 package org.thws.bookhub.api.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.thws.bookhub.domain.model.Genre;
 import org.thws.bookhub.domain.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +31,9 @@ public class GenreController {
 
     // Alle Genres abrufen (GET)
     @GetMapping
-    public List<Genre> getAllGenres() {
-        return genreService.findAllGenres();
+    public ResponseEntity<Page<Genre>> getAllGenres(Pageable pageable) {
+        Page<Genre> genrePage = genreService.findAllGenres(pageable);
+        return new ResponseEntity<>(genrePage, HttpStatus.OK);
     }
 
     // 4. Genre aktualisieren (PUT)
@@ -44,8 +49,9 @@ public class GenreController {
     }
 
     @GetMapping("/by-name")
-    public List<Genre> getGenreByName(@RequestParam String name) {
-        return genreService.findGenreByName(name);
+    public ResponseEntity<Page<Genre>> getGenreByName(@RequestParam String name, Pageable pageable) {
+        Page<Genre> genrePage = genreService.findGenreByName(name, pageable);
+        return new ResponseEntity<>(genrePage, HttpStatus.OK);
     }
 
 }

@@ -1,5 +1,7 @@
 package org.thws.bookhub.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,17 +17,21 @@ public class Buch {
 
     @ManyToOne
     @JoinColumn(name = "autor_id")
+    @JsonBackReference
     private Autor autor;
 
     @ManyToOne
     @JoinColumn(name = "genre_id")
+    @JsonBackReference
     private Genre genre;
 
     @ManyToOne
     @JoinColumn(name = "verlag_id")
+    @JsonBackReference
     private Verlag verlag;
 
     @OneToMany(mappedBy = "buch")
+    @JsonManagedReference
     private List<Bewertung> bewertungen = new ArrayList<>();
 
 

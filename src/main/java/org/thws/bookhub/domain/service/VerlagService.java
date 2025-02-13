@@ -1,4 +1,6 @@
 package org.thws.bookhub.domain.service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.thws.bookhub.domain.model.Verlag;
 import org.thws.bookhub.persistence.VerlagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,8 @@ public class VerlagService {
     }
 
     // Alle Verlage abrufen
-    public List<Verlag> findAllVerlage() {
-        return verlagRepository.findAll();
+    public Page<Verlag> findAllVerlage(Pageable pageable) {
+        return verlagRepository.findAllBy(pageable);
     }
 
     // 6. Verlag aktualisieren
@@ -47,13 +49,13 @@ public class VerlagService {
     }
 
     // Verlag nach Sitz suchen
-    public List<Verlag> findVerlagBySitz(String sitz) {
-        return verlagRepository.findBySitz(sitz);
+    public Page<Verlag> findVerlagBySitz(String sitz, Pageable pageable) {
+        return verlagRepository.findBySitz(sitz, pageable);
     }
 
     // Verlag nach Gründungsjahr suchen
-    public List<Verlag> findVerlagByGruendungsjahr(Integer gruendungsjahr) {
-        return verlagRepository.findByGruendungsjahr(gruendungsjahr);
+    public Page<Verlag> findVerlagByGruendungsjahr(Integer gruendungsjahr, Pageable pageable) {
+        return verlagRepository.findByGruendungsjahr(gruendungsjahr, pageable);
     }
 
 }

@@ -1,5 +1,7 @@
 package org.thws.bookhub.api.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.thws.bookhub.domain.model.Autor;
@@ -32,9 +34,9 @@ public class AutorController {
 
     // Alle Autoren abrufen (Read)
     @GetMapping
-    public ResponseEntity<List<Autor>> getAllAuthors() {
-        List<Autor> autoren = autorService.getAllAutoren();
-        return new ResponseEntity<>(autoren, HttpStatus.OK); // Rückgabe einer Liste aller Autoren mit Status 200 OK
+    public ResponseEntity<Page<Autor>> getAllAuthors(Pageable pageable) {
+        Page<Autor> autorenPage = autorService.getAllAutoren(pageable);
+        return new ResponseEntity<>(autorenPage, HttpStatus.OK); // Rückgabe einer Liste aller Autoren mit Status 200 OK
     }
 
     // Autoren nach ID abrufen (Read)
@@ -72,26 +74,30 @@ public class AutorController {
 
     // Autoren nach Nachname suchen
     @GetMapping("/by-nachname")
-    public List<Autor> getAutorenByNachname(@RequestParam String nachname) {
-        return autorService.getAutorbyNachname(nachname);
+    public ResponseEntity<Page<Autor>> getAutorenByNachname(@RequestParam String nachname, Pageable pageable) {
+        Page<Autor> autorenPage = autorService.getAutorByNachname(nachname, pageable);
+        return new ResponseEntity<>(autorenPage, HttpStatus.OK);
     }
 
     // Autoren nach Vorname suchen
     @GetMapping("/by-vorname")
-    public List<Autor> getAutorenByVorname(@RequestParam String vorname) {
-        return autorService.getAutorByVorname(vorname);
+    public ResponseEntity<Page<Autor>> getAutorenByVorname(@RequestParam String vorname, Pageable pageable) {
+        Page<Autor> autorenPage = autorService.getAutorByVorname(vorname, pageable);
+        return new ResponseEntity<>(autorenPage, HttpStatus.OK);
     }
 
     // Autoren nach Nationalität suchen
     @GetMapping("/by-nationalitaet")
-    public List<Autor> getAutorenByNationalitaet(@RequestParam String nationalitaet) {
-        return autorService.getAutorByNationalitaet(nationalitaet);
+    public ResponseEntity<Page<Autor>> getAutorenByNationalitaet(@RequestParam String nationalitaet, Pageable pageable) {
+        Page<Autor> autorenPage = autorService.getAutorByNationalitaet(nationalitaet, pageable);
+        return new ResponseEntity<>(autorenPage, HttpStatus.OK);
     }
 
     // Autoren nach Geburtsdatum suchen
     @GetMapping("/by-geburtsdatum")
-    public List<Autor> getAutorenByGeburtsdatum(@RequestParam LocalDate geburtsdatum) {
-        return autorService.getAutorByGeburtsdatum(geburtsdatum);
+    public ResponseEntity<Page<Autor>> getAutorenByGeburtsdatum(@RequestParam LocalDate geburtsdatum, Pageable pageable) {
+        Page<Autor> autorenPage = autorService.getAutorByGeburtsdatum(geburtsdatum, pageable);
+        return new ResponseEntity<>(autorenPage, HttpStatus.OK);
     }
 
 }

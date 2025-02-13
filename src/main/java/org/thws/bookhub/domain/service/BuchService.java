@@ -1,5 +1,7 @@
 package org.thws.bookhub.domain.service;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.thws.bookhub.domain.model.Buch;
 import org.thws.bookhub.domain.model.Genre;
 import org.thws.bookhub.persistence.BuchRepository;
@@ -26,8 +28,8 @@ public class BuchService {
     }
 
     // Alle Bücher abrufen
-    public List<Buch> findAllBuecher() {
-        return buchRepository.findAll();
+    public Page<Buch> findAllBuecher(Pageable pageable) {
+        return buchRepository.findAllBy(pageable);
     }
 
     // Buch nach ID abrufen
@@ -50,23 +52,23 @@ public class BuchService {
     }
 
     // Bücher nach Titel suchen
-    public List<Buch> findBuecherByTitel(String titel) {
-        return buchRepository.findByTitel(titel);
+    public Page<Buch> findBuecherByTitel(String titel, Pageable pageable) {
+        return buchRepository.findByTitel(titel, pageable);
     }
 
     // Bücher nach Veröffentlichungsdatum suchen
-    public List<Buch> findBuecherByVeroeffentlichungsdatum(LocalDate veroeffentlichungsdatum) {
-        return buchRepository.findByVeroeffentlichungsdatum(veroeffentlichungsdatum);
+    public Page<Buch> findBuecherByVeroeffentlichungsdatum(LocalDate veroeffentlichungsdatum, Pageable pageable) {
+        return buchRepository.findByVeroeffentlichungsdatum(veroeffentlichungsdatum, pageable);
     }
 
     // Bücher nach Genre suchen
-    public List<Buch> findBuecherByGenre(Genre genre) {
-        return buchRepository.findByGenre(genre);
+    public Page<Buch> findBuecherByGenre(Genre genre, Pageable pageable) {
+        return buchRepository.findByGenre(genre, pageable);
     }
 
     // Bücher nach Seitenanzahl suchen
-    public List<Buch> findBuecherBySeitenanzahl(int seitenanzahl) {
-        return buchRepository.findBySeitenanzahl(seitenanzahl);
+    public Page<Buch> findBuecherBySeitenanzahl(int seitenanzahl, Pageable pageable) {
+        return buchRepository.findBySeitenanzahl(seitenanzahl, pageable);
     }
 
 }

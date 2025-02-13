@@ -1,4 +1,6 @@
 package org.thws.bookhub.domain.service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.thws.bookhub.domain.model.Benutzer;
 import org.thws.bookhub.persistence.BenutzerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,8 @@ public class BenutzerService {
     }
 
     // Alle Benutzer abrufen
-    public List<Benutzer> getAllBenutzer() {
-        return benutzerRepository.findAll();
+    public Page<Benutzer> getAllBenutzer(Pageable pageable) {
+        return benutzerRepository.findAllBy(pageable);
     }
 
     // Benutzer nach ID abrufen
@@ -47,8 +49,8 @@ public class BenutzerService {
     }
 
     // Benutzer nach Name abrufen
-    public List<Benutzer> getBenutzerByName(String name) {
-        return benutzerRepository.findByName(name);
+    public Page<Benutzer> getBenutzerByName(String name, Pageable pageable) {
+        return benutzerRepository.findByName(name, pageable);
     }
 
     // Benutzer nach E-Mail abrufen
