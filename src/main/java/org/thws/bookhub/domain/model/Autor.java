@@ -19,6 +19,16 @@ public class Autor {
     @OneToMany(mappedBy = "autor")
     private List<Buch> buecher = new ArrayList<>();
 
+    // Standard-Konstruktor
+    public Autor() {}
+
+    // Konstruktor
+    public Autor(String vorname, String nachname, LocalDate geburtsdatum, String nationalitaet) {
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.geburtsdatum = geburtsdatum;
+        this.nationalitaet = nationalitaet;
+    }
 
     // Getter and Setters
 

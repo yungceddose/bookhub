@@ -71,25 +71,25 @@ public class AutorController {
 
 
     // Autoren nach Nachname suchen
-    @GetMapping("/api/autoren/by-nachname")
+    @GetMapping("/by-nachname")
     public List<Autor> getAutorenByNachname(@RequestParam String nachname) {
         return autorService.getAutorbyNachname(nachname);
     }
 
     // Autoren nach Vorname suchen
-    @GetMapping("/api/autoren/by-vorname")
+    @GetMapping("/by-vorname")
     public List<Autor> getAutorenByVorname(@RequestParam String vorname) {
         return autorService.getAutorByVorname(vorname);
     }
 
     // Autoren nach Nationalität suchen
-    @GetMapping("/api/autoren/by-nationalitaet")
+    @GetMapping("/by-nationalitaet")
     public List<Autor> getAutorenByNationalitaet(@RequestParam String nationalitaet) {
         return autorService.getAutorByNationalitaet(nationalitaet);
     }
 
     // Autoren nach Geburtsdatum suchen
-    @GetMapping("/api/autoren/by-geburtsdatum")
+    @GetMapping("/by-geburtsdatum")
     public List<Autor> getAutorenByGeburtsdatum(@RequestParam LocalDate geburtsdatum) {
         return autorService.getAutorByGeburtsdatum(geburtsdatum);
     }
