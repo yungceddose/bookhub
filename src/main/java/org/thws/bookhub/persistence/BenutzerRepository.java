@@ -8,7 +8,7 @@ import org.thws.bookhub.domain.model.Benutzer;
 public interface BenutzerRepository extends JpaRepository<Benutzer, Long>{
     List<Benutzer> findByName(String name);
 
-    List<Benutzer> findByEmail(String email);
+    Benutzer findByEmail(String email);
 
 
 }

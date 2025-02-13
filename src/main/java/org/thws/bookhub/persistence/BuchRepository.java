@@ -8,7 +8,7 @@ import org.thws.bookhub.domain.model.Buch;
 import org.thws.bookhub.domain.model.Genre;
 
 @Repository
-public interface BuchRepository extends JpaRepository<Buch, Long>{
+public interface BuchRepository extends JpaRepository<Buch, String>{
 
     List<Buch> findByTitel(String titel);
 
@@ -17,5 +17,7 @@ public interface BuchRepository extends JpaRepository<Buch, Long>{
     List<Buch> findByGenre(Genre genre);
 
     List<Buch> findBySeitenanzahl(int seitenanzahl);
+
+    Buch findByIsbnNummer(String isbnNummer);
     
 }

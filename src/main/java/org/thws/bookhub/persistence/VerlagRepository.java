@@ -8,7 +8,7 @@ import org.thws.bookhub.domain.model.Verlag;
 @Repository
 public interface VerlagRepository extends JpaRepository<Verlag, Long> {
 
-    List<Verlag> findByName(String name);
+    Verlag findByName(String name);
 
     List<Verlag> findBySitz(String sitz);
 
