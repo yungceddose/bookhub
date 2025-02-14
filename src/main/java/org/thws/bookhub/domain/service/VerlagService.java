@@ -34,7 +34,7 @@ public class VerlagService {
     }
 
     // 6. Verlag aktualisieren
-    @CacheEvict(value = "verlage", key = "#id")
+    @CacheEvict(value = "verlage", allEntries = true)
     public Verlag updateVerlag(Long id, Verlag verlag) {
         if (verlagRepository.existsById(id)) {
             verlag.setId(id); // ID beibehalten
@@ -44,7 +44,7 @@ public class VerlagService {
     }
 
     // Verlag löschen
-    @CacheEvict(value = "verlage", key = "#id")
+    @CacheEvict(value = "verlage", allEntries = true)
     public void deleteVerlag(Long id) {
         verlagRepository.deleteById(id);
     }

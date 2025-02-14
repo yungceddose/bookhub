@@ -43,7 +43,7 @@ public class BuchService {
     }
 
     // Buch aktualisieren
-    @CacheEvict(value = "buecher", key = "#isbn")
+    @CacheEvict(value = "buecher", allEntries = true)
     public Buch updateBuch(String isbn, Buch buch) {
         if (buchRepository.existsById(isbn)) {
             buch.setIsbnNummer(isbn); // ISBN beibehalten
@@ -53,7 +53,7 @@ public class BuchService {
     }
 
     // Buch löschen
-    @CacheEvict(value = "buecher", key = "#isbn")
+    @CacheEvict(value = "buecher", allEntries = true)
     public void deleteBuch(String isbn) {
         buchRepository.deleteById(isbn);
     }

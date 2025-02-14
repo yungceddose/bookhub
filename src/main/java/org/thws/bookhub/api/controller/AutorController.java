@@ -2,8 +2,13 @@ package org.thws.bookhub.api.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.thws.bookhub.api.assembler.AutorModelAssembler;
 import org.thws.bookhub.domain.model.Autor;
 import org.thws.bookhub.domain.service.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +16,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/autoren")
 public class AutorController {
 
     private final AutorService autorService;
+    private final AutorModelAssembler assembler;
+    private final PagedResourcesAssembler<Autor> pagedResourcesAssembler;
 
     @Autowired
-    public AutorController(AutorService autorService) {
+    public AutorController(AutorService autorService,
+                           AutorModelAssembler assembler,
+                           PagedResourcesAssembler<Autor> pagedResourcesAssembler) {
         this.autorService = autorService;
+        this.assembler = assembler;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
 
@@ -34,19 +49,20 @@ public class AutorController {
 
     // Alle Autoren abrufen (Read)
     @GetMapping
-    public ResponseEntity<Page<Autor>> getAllAuthors(Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Autor>>> getAllAuthors(Pageable pageable) {
         Page<Autor> autorenPage = autorService.getAllAutoren(pageable);
-        return new ResponseEntity<>(autorenPage, HttpStatus.OK); // Rückgabe einer Liste aller Autoren mit Status 200 OK
+        PagedModel<EntityModel<Autor>> pagedModel = pagedResourcesAssembler.toModel(autorenPage, assembler);
+        return ResponseEntity.ok(pagedModel); // Rückgabe einer Liste aller Autoren mit Status 200 OK
     }
 
     // Autoren nach ID abrufen (Read)
     @GetMapping("/{id}")
-    public ResponseEntity<Autor> getAutorById(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<Autor>> getAutorById(@PathVariable Long id) {
         Autor autor = autorService.getAutorById(id);
         if (autor != null) {
-            return new ResponseEntity<>(autor, HttpStatus.OK); // Rückgabe des Autors mit Status 200 OK
+            return ResponseEntity.ok(assembler.toModel(autor)); // Rückgabe des Autors mit Status 200 OK
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Autor wurde nicht gefunden, Status 404
+            return ResponseEntity.notFound().build(); // Autor wurde nicht gefunden, Status 404
         }
     }
 
@@ -74,30 +90,34 @@ public class AutorController {
 
     // Autoren nach Nachname suchen
     @GetMapping("/by-nachname")
-    public ResponseEntity<Page<Autor>> getAutorenByNachname(@RequestParam String nachname, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Autor>>> getAutorenByNachname(@RequestParam String nachname, Pageable pageable) {
         Page<Autor> autorenPage = autorService.getAutorByNachname(nachname, pageable);
-        return new ResponseEntity<>(autorenPage, HttpStatus.OK);
+        PagedModel<EntityModel<Autor>> pagedModel = pagedResourcesAssembler.toModel(autorenPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // Autoren nach Vorname suchen
     @GetMapping("/by-vorname")
-    public ResponseEntity<Page<Autor>> getAutorenByVorname(@RequestParam String vorname, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Autor>>> getAutorenByVorname(@RequestParam String vorname, Pageable pageable) {
         Page<Autor> autorenPage = autorService.getAutorByVorname(vorname, pageable);
-        return new ResponseEntity<>(autorenPage, HttpStatus.OK);
+        PagedModel<EntityModel<Autor>> pagedModel = pagedResourcesAssembler.toModel(autorenPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // Autoren nach Nationalität suchen
     @GetMapping("/by-nationalitaet")
-    public ResponseEntity<Page<Autor>> getAutorenByNationalitaet(@RequestParam String nationalitaet, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Autor>>> getAutorenByNationalitaet(@RequestParam String nationalitaet, Pageable pageable) {
         Page<Autor> autorenPage = autorService.getAutorByNationalitaet(nationalitaet, pageable);
-        return new ResponseEntity<>(autorenPage, HttpStatus.OK);
+        PagedModel<EntityModel<Autor>> pagedModel = pagedResourcesAssembler.toModel(autorenPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // Autoren nach Geburtsdatum suchen
     @GetMapping("/by-geburtsdatum")
-    public ResponseEntity<Page<Autor>> getAutorenByGeburtsdatum(@RequestParam LocalDate geburtsdatum, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Autor>>> getAutorenByGeburtsdatum(@RequestParam LocalDate geburtsdatum, Pageable pageable) {
         Page<Autor> autorenPage = autorService.getAutorByGeburtsdatum(geburtsdatum, pageable);
-        return new ResponseEntity<>(autorenPage, HttpStatus.OK);
+        PagedModel<EntityModel<Autor>> pagedModel = pagedResourcesAssembler.toModel(autorenPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
 }

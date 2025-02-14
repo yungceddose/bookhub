@@ -2,8 +2,13 @@ package org.thws.bookhub.api.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.thws.bookhub.api.assembler.AutorModelAssembler;
+import org.thws.bookhub.api.assembler.BuchModelAssembler;
 import org.thws.bookhub.domain.model.Autor;
 import org.thws.bookhub.domain.model.Buch;
 import org.thws.bookhub.domain.model.Genre;
@@ -20,10 +25,16 @@ import java.util.Optional;
 public class BuchController {
 
     private final BuchService buchService;
+    private final BuchModelAssembler assembler;
+    private final PagedResourcesAssembler<Buch> pagedResourcesAssembler;
 
     @Autowired
-    public BuchController(BuchService buchService) {
+    public BuchController(BuchService buchService,
+                          BuchModelAssembler assembler,
+                          PagedResourcesAssembler<Buch> pagedResourcesAssembler) {
         this.buchService = buchService;
+        this.assembler = assembler;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     // Buch erstellen (POST)
@@ -34,15 +45,18 @@ public class BuchController {
 
     // Alle Bücher abrufen (GET)
     @GetMapping
-    public ResponseEntity<Page<Buch>> getAllBuecher(Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Buch>>> getAllBuecher(Pageable pageable) {
         Page<Buch> buchPage = buchService.findAllBuecher(pageable);
-        return new ResponseEntity<>(buchPage, HttpStatus.OK);
+        PagedModel<EntityModel<Buch>> pagedModel = pagedResourcesAssembler.toModel(buchPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // Buch nach ISBN abrufen (GET)
     @GetMapping("/{isbn}")
-    public Optional<Buch> getBuchByIsbn(@PathVariable String isbn) {
-        return buchService.findBuchById(isbn);
+    public ResponseEntity<EntityModel<Buch>> getBuchByIsbn(@PathVariable String isbn) {
+        Optional<Buch> buch = buchService.findBuchById(isbn);
+        return buch.map(value -> ResponseEntity.ok(assembler.toModel(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Buch aktualisieren (PUT)
@@ -53,36 +67,41 @@ public class BuchController {
 
     // Buch löschen (DELETE)
     @DeleteMapping("/{isbn}")
-    public void deleteBuch(@PathVariable String isbn) {
+    public ResponseEntity<Void> deleteBuch(@PathVariable String isbn) {
         buchService.deleteBuch(isbn);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // Bücher nach Titel suchen (GET)
     @GetMapping("/by-titel")
-    public ResponseEntity<Page<Buch>> getBuecherByTitel(@RequestParam String titel, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Buch>>> getBuecherByTitel(@RequestParam String titel, Pageable pageable) {
         Page<Buch> buchPage = buchService.findBuecherByTitel(titel, pageable);
-        return new ResponseEntity<>(buchPage, HttpStatus.OK);
+        PagedModel<EntityModel<Buch>> pagedModel = pagedResourcesAssembler.toModel(buchPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // Bücher nach Veröffentlichungsdatum suchen (GET)
     @GetMapping("/by-veroeffentlichungsdatum")
-    public ResponseEntity<Page<Buch>> getBuecherByVeroeffentlichungsdatum(@RequestParam LocalDate veroeffentlichungsdatum, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Buch>>> getBuecherByVeroeffentlichungsdatum(@RequestParam LocalDate veroeffentlichungsdatum, Pageable pageable) {
         Page<Buch> buchPage = buchService.findBuecherByVeroeffentlichungsdatum(veroeffentlichungsdatum, pageable);
-        return new ResponseEntity<>(buchPage, HttpStatus.OK);
+        PagedModel<EntityModel<Buch>> pagedModel = pagedResourcesAssembler.toModel(buchPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // Bücher nach Genre suchen (GET)
     @GetMapping("/by-genre")
-    public ResponseEntity<Page<Buch>> getBuecherByGenre(@RequestParam Genre genre, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Buch>>> getBuecherByGenre(@RequestParam Genre genre, Pageable pageable) {
         Page<Buch> buchPage = buchService.findBuecherByGenre(genre, pageable);
-        return new ResponseEntity<>(buchPage, HttpStatus.OK);
+        PagedModel<EntityModel<Buch>> pagedModel = pagedResourcesAssembler.toModel(buchPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // Bücher nach Seitenanzahl suchen (GET)
     @GetMapping("/by-seitenanzahl")
-    public ResponseEntity<Page<Buch>> getBuecherBySeitenanzahl(@RequestParam int seitenanzahl, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Buch>>> getBuecherBySeitenanzahl(@RequestParam int seitenanzahl, Pageable pageable) {
         Page<Buch> buchPage = buchService.findBuecherBySeitenanzahl(seitenanzahl, pageable);
-        return new ResponseEntity<>(buchPage, HttpStatus.OK);
+        PagedModel<EntityModel<Buch>> pagedModel = pagedResourcesAssembler.toModel(buchPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
 }

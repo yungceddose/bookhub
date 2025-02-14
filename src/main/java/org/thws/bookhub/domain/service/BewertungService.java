@@ -40,7 +40,7 @@ public class BewertungService {
     }
 
     // Bewertung aktualisieren
-    @CacheEvict(value = "bewertungen", key = "#id")
+    @CacheEvict(value = "bewertungen", allEntries = true)
     public Bewertung updateBewertung(Long id, Bewertung bewertung) {
         if (bewertungRepository.existsById(id)) {
             bewertung.setId(id); // ID beibehalten
@@ -50,7 +50,7 @@ public class BewertungService {
     }
 
     // Bewertung löschen
-    @CacheEvict(value = "bewertungen", key = "#id")
+    @CacheEvict(value = "bewertungen", allEntries = true)
     public void deleteBewertung(Long id) {
         bewertungRepository.deleteById(id);
     }

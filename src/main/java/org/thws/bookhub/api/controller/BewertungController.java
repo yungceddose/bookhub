@@ -2,8 +2,13 @@ package org.thws.bookhub.api.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.thws.bookhub.api.assembler.BewertungModelAssembler;
+import org.thws.bookhub.domain.model.Autor;
 import org.thws.bookhub.domain.model.Bewertung;
 import org.thws.bookhub.domain.service.BewertungService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +23,16 @@ import java.util.Optional;
 public class BewertungController {
 
     private final BewertungService bewertungService;
+    private final BewertungModelAssembler assembler;
+    private final PagedResourcesAssembler<Bewertung> pagedResourcesAssembler;
 
     @Autowired
-    public BewertungController(BewertungService bewertungService) {
+    public BewertungController(BewertungService bewertungService,
+                               BewertungModelAssembler assembler,
+                               PagedResourcesAssembler<Bewertung> pagedResourcesAssembler) {
         this.bewertungService = bewertungService;
+        this.assembler = assembler;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     // Bewertung erstellen (POST)
@@ -32,15 +43,18 @@ public class BewertungController {
 
     // Alle Bewertungen abrufen (GET)
     @GetMapping
-    public ResponseEntity<Page<Bewertung>> getAllBewertungen(Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Bewertung>>> getAllBewertungen(Pageable pageable) {
         Page<Bewertung> bewertungPage = bewertungService.findAllBewertungen(pageable);
-        return new ResponseEntity<>(bewertungPage, HttpStatus.OK);
+        PagedModel<EntityModel<Bewertung>> pagedModel = pagedResourcesAssembler.toModel(bewertungPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // 3. Bewertung nach ID abrufen (GET)
     @GetMapping("/{id}")
-    public Optional<Bewertung> getBewertungById(@PathVariable Long id) {
-        return bewertungService.findBewertungById(id);
+    public ResponseEntity<EntityModel<Bewertung>> getBewertungById(@PathVariable Long id) {
+        Optional<Bewertung> bewertung = bewertungService.findBewertungById(id);
+        return bewertung.map(value -> ResponseEntity.ok(assembler.toModel(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Bewertung aktualisieren (PUT)
@@ -51,15 +65,17 @@ public class BewertungController {
 
     // Bewertung löschen (DELETE)
     @DeleteMapping("/{id}")
-    public void deleteBewertung(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBewertung(@PathVariable Long id) {
         bewertungService.deleteBewertung(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // Bewertungen nach Punktzahl suchen (GET)
     @GetMapping("/by-punktzahl")
-    public ResponseEntity<Page<Bewertung>> getBewertungenByPunktzahl(@RequestParam int punktzahl, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Bewertung>>> getBewertungenByPunktzahl(@RequestParam int punktzahl, Pageable pageable) {
         Page<Bewertung> bewertungPage = bewertungService.findBewertungenByPunktzahl(punktzahl, pageable);
-        return new ResponseEntity<>(bewertungPage, HttpStatus.OK);
+        PagedModel<EntityModel<Bewertung>> pagedModel = pagedResourcesAssembler.toModel(bewertungPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
 }

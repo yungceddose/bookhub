@@ -40,7 +40,7 @@ public class BenutzerService {
     }
 
     // Benutzer aktualisieren
-    @CacheEvict(value = "benutzer", key = "#id")
+    @CacheEvict(value = "benutzer", allEntries = true)
     public Benutzer updateBenutzer(Long id, Benutzer benutzer) {
         if (benutzerRepository.existsById(id)) {
             benutzer.setId(id); // ID beibehalten
@@ -50,7 +50,7 @@ public class BenutzerService {
     }
 
     // Benutzer löschen
-    @CacheEvict(value = "benutzer", key = "#id")
+    @CacheEvict(value = "benutzer", allEntries = true)
     public void deleteBenutzer(Long id) {
         benutzerRepository.deleteById(id);
     }

@@ -2,8 +2,14 @@ package org.thws.bookhub.api.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.thws.bookhub.api.assembler.AutorModelAssembler;
+import org.thws.bookhub.api.assembler.VerlagModelAssembler;
+import org.thws.bookhub.domain.model.Autor;
 import org.thws.bookhub.domain.model.Verlag;
 import org.thws.bookhub.domain.service.VerlagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +22,16 @@ import java.util.Optional;
 public class VerlagController {
 
     private final VerlagService verlagService;
+    private final VerlagModelAssembler assembler;
+    private final PagedResourcesAssembler<Verlag> pagedResourcesAssembler;
 
     @Autowired
-    public VerlagController(VerlagService verlagService) {
+    public VerlagController(VerlagService verlagService,
+                            VerlagModelAssembler assembler,
+                            PagedResourcesAssembler<Verlag> pagedResourcesAssembler) {
         this.verlagService = verlagService;
+        this.assembler = assembler;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     // Verlag erstellen (POST)
@@ -30,9 +42,10 @@ public class VerlagController {
 
     // Alle Verlage abrufen (GET)
     @GetMapping
-    public ResponseEntity<Page<Verlag>> getAllVerlage(Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Verlag>>> getAllVerlage(Pageable pageable) {
         Page<Verlag> verlagPage = verlagService.findAllVerlage(pageable);
-        return new ResponseEntity<>(verlagPage, HttpStatus.OK);
+        PagedModel<EntityModel<Verlag>> pagedModel = pagedResourcesAssembler.toModel(verlagPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // Verlag aktualisieren (PUT)
@@ -43,28 +56,32 @@ public class VerlagController {
 
     // Verlag löschen (DELETE)
     @DeleteMapping("/{id}")
-    public void deleteVerlag(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteVerlag(@PathVariable Long id) {
         verlagService.deleteVerlag(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // Verlag nach Name suchen (GET)
     @GetMapping("/by-name")
-    public Verlag getVerlagByName(@RequestParam String name) {
-        return verlagService.findVerlagByName(name);
+    public ResponseEntity<EntityModel<Verlag>> getVerlagByName(@RequestParam String name) {
+        Verlag verlag = verlagService.findVerlagByName(name);
+        return ResponseEntity.ok(assembler.toModel(verlag));
     }
 
     // Verlag nach Sitz suchen (GET)
     @GetMapping("/by-sitz")
-    public ResponseEntity<Page<Verlag>> getVerlagBySitz(@RequestParam String sitz, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Verlag>>> getVerlagBySitz(@RequestParam String sitz, Pageable pageable) {
         Page<Verlag> verlagPage = verlagService.findVerlagBySitz(sitz, pageable);
-        return new ResponseEntity<>(verlagPage, HttpStatus.OK);
+        PagedModel<EntityModel<Verlag>> pagedModel = pagedResourcesAssembler.toModel(verlagPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
     // Verlag nach Gründungsjahr suchen (GET)
     @GetMapping("/by-gruendungsjahr")
-    public ResponseEntity<Page<Verlag>> getVerlagByGruendungsjahr(@RequestParam Integer gruendungsjahr, Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<Verlag>>> getVerlagByGruendungsjahr(@RequestParam Integer gruendungsjahr, Pageable pageable) {
         Page<Verlag> verlagPage = verlagService.findVerlagByGruendungsjahr(gruendungsjahr, pageable);
-        return new ResponseEntity<>(verlagPage, HttpStatus.OK);
+        PagedModel<EntityModel<Verlag>> pagedModel = pagedResourcesAssembler.toModel(verlagPage, assembler);
+        return ResponseEntity.ok(pagedModel);
     }
 
 }

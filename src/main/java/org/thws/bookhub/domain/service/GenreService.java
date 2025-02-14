@@ -36,7 +36,7 @@ public class GenreService {
     }
 
     // Genre aktualisieren
-    @CacheEvict(value = "genres", key = "#id")
+    @CacheEvict(value = "genres", allEntries = true)
     public Genre updateGenre(Long id, Genre genre) {
         if (genreRepository.existsById(id)) {
             genre.setId(id); // ID beibehalten
@@ -46,7 +46,7 @@ public class GenreService {
     }
 
     // Genre löschen
-    @CacheEvict(value = "genres", key = "#id")
+    @CacheEvict(value = "genres", allEntries = true)
     public void deleteGenre(Long id) {
         genreRepository.deleteById(id);
     }

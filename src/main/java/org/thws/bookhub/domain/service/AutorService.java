@@ -44,7 +44,7 @@ public class AutorService {
 
 
     // Autor aktualisieren (Update)
-    @CacheEvict(value = "autoren", key = "#id")
+    @CacheEvict(value = "autoren", allEntries = true)
     public Autor updateAutor(Long id, Autor updatedAutor){
         Optional<Autor> existingAutor = autorRepository.findById(id);
         if(existingAutor.isPresent()){
@@ -59,7 +59,7 @@ public class AutorService {
     }
 
     // Autor löschen (Delete)
-    @CacheEvict(value = "autoren", key = "#id")
+    @CacheEvict(value = "autoren", allEntries = true)
     public void deleteAutor(Long id){
         autorRepository.deleteById(id);
     }
