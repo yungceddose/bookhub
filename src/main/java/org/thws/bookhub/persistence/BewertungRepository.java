@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 public interface BewertungRepository extends JpaRepository<Bewertung, Long> {
-    Page<Bewertung> findAllBy(Pageable pageable);
+    Page<Bewertung> findAll(Pageable pageable);
 
     Page<Bewertung> findByPunktzahl(int punktzahl, Pageable pageable);
 }

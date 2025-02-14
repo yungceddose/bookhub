@@ -9,7 +9,7 @@ import org.thws.bookhub.domain.model.Genre;
 
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Long> {
-    Page<Genre> findAllBy(Pageable pageable);
+    Page<Genre> findAll(Pageable pageable);
 
     Page<Genre> findByName(String name, Pageable pageable);
 }

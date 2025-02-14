@@ -12,7 +12,7 @@ import org.thws.bookhub.domain.model.Genre;
 
 @Repository
 public interface BuchRepository extends JpaRepository<Buch, String>{
-    Page<Buch> findAllBy(Pageable pageable);
+    Page<Buch> findAll(Pageable pageable);
 
     Page<Buch> findByTitel(String titel, Pageable pageable);
 

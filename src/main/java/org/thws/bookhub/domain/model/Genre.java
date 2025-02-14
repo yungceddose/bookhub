@@ -14,7 +14,7 @@ public class Genre {
     private String name;
 
     @OneToMany(mappedBy = "genre")
-    @JsonManagedReference
+    @JsonManagedReference(value = "genre-buecher")
     private List<Buch> buecher = new ArrayList<>();
 
 

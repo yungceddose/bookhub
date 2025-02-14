@@ -12,12 +12,12 @@ public class Bewertung {
 
     @ManyToOne
     @JoinColumn(name = "buch_id")
-    @JsonBackReference
+    @JsonBackReference(value = "buch-bewertungen")
     private Buch buch;
 
     @ManyToOne
     @JoinColumn(name = "benutzer_id")
-    @JsonBackReference
+    @JsonBackReference(value = "benutzer-bewertungen")
     private Benutzer benutzer;
 
 

@@ -1,4 +1,6 @@
 package org.thws.bookhub.domain.service;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,16 +24,19 @@ public class GenreService {
     }
 
     // Genre erstellen
+    @CacheEvict(value = "genres", allEntries = true)
     public Genre createGenre(Genre genre) {
         return genreRepository.save(genre);
     }
 
     // Alle Genres abrufen
+    @Cacheable("genres")
     public Page<Genre> findAllGenres(Pageable pageable) {
-        return genreRepository.findAllBy(pageable);
+        return genreRepository.findAll(pageable);
     }
 
     // Genre aktualisieren
+    @CacheEvict(value = "genres", key = "#id")
     public Genre updateGenre(Long id, Genre genre) {
         if (genreRepository.existsById(id)) {
             genre.setId(id); // ID beibehalten
@@ -41,11 +46,13 @@ public class GenreService {
     }
 
     // Genre löschen
+    @CacheEvict(value = "genres", key = "#id")
     public void deleteGenre(Long id) {
         genreRepository.deleteById(id);
     }
 
     // Genre nach Name suchen
+    @Cacheable(value = "genres", key = "#name")
     public Page<Genre> findGenreByName(String name, Pageable pageable) {
         return genreRepository.findByName(name, pageable);
     }

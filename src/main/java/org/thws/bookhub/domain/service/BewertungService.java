@@ -1,4 +1,6 @@
 package org.thws.bookhub.domain.service;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.thws.bookhub.domain.model.Bewertung;
@@ -20,21 +22,25 @@ public class BewertungService {
     }
 
     // Bewertung erstellen
+    @CacheEvict(value = "bewertungen", allEntries = true)
     public Bewertung createBewertung(Bewertung bewertung) {
         return bewertungRepository.save(bewertung);
     }
 
     // Alle Bewertungen abrufen
+    @Cacheable("bewertungen")
     public Page<Bewertung> findAllBewertungen(Pageable pageable) {
-        return bewertungRepository.findAllBy(pageable);
+        return bewertungRepository.findAll(pageable);
     }
 
     // Bewertung nach ID abrufen
+    @Cacheable(value = "bewertungen", key = "#id")
     public Optional<Bewertung> findBewertungById(Long id) {
         return bewertungRepository.findById(id);
     }
 
     // Bewertung aktualisieren
+    @CacheEvict(value = "bewertungen", key = "#id")
     public Bewertung updateBewertung(Long id, Bewertung bewertung) {
         if (bewertungRepository.existsById(id)) {
             bewertung.setId(id); // ID beibehalten
@@ -44,11 +50,13 @@ public class BewertungService {
     }
 
     // Bewertung löschen
+    @CacheEvict(value = "bewertungen", key = "#id")
     public void deleteBewertung(Long id) {
         bewertungRepository.deleteById(id);
     }
 
     // Bewertungen nach Punktzahl suchen
+    @Cacheable(value = "bewertungen", key = "#punktzahl")
     public Page<Bewertung> findBewertungenByPunktzahl(int punktzahl, Pageable pageable) {
         return bewertungRepository.findByPunktzahl(punktzahl, pageable);
     }

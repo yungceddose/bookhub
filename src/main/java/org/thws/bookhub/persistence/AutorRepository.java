@@ -11,7 +11,7 @@ import org.thws.bookhub.domain.model.Autor;
 @Repository
 public interface AutorRepository extends JpaRepository<Autor, Long>{
 
-    Page<Autor> findAllBy(Pageable pageable);
+    Page<Autor> findAll(Pageable pageable);
 
     Page<Autor> findByVorname(String vorname, Pageable pageable);
 

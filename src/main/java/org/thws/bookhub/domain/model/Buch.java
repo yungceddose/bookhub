@@ -17,21 +17,21 @@ public class Buch {
 
     @ManyToOne
     @JoinColumn(name = "autor_id")
-    @JsonBackReference
+    @JsonBackReference(value = "autor-buecher")
     private Autor autor;
 
     @ManyToOne
     @JoinColumn(name = "genre_id")
-    @JsonBackReference
+    @JsonBackReference(value = "genre-buecher")
     private Genre genre;
 
     @ManyToOne
     @JoinColumn(name = "verlag_id")
-    @JsonBackReference
+    @JsonBackReference(value = "verlag-buecher")
     private Verlag verlag;
 
     @OneToMany(mappedBy = "buch")
-    @JsonManagedReference
+    @JsonManagedReference(value = "buch-bewertungen")
     private List<Bewertung> bewertungen = new ArrayList<>();
 
 

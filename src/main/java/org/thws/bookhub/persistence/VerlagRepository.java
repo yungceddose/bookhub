@@ -11,7 +11,7 @@ import org.thws.bookhub.domain.model.Verlag;
 @Repository
 public interface VerlagRepository extends JpaRepository<Verlag, Long> {
 
-    Page<Verlag> findAllBy(Pageable pageable);
+    Page<Verlag> findAll(Pageable pageable);
 
     Verlag findByName(String name);
 

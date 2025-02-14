@@ -18,7 +18,7 @@ public class Autor {
     private String nationalitaet;
 
     @OneToMany(mappedBy = "autor")
-    @JsonManagedReference
+    @JsonManagedReference(value = "autor-buecher")
     private List<Buch> buecher = new ArrayList<>();
 
     // Standard-Konstruktor

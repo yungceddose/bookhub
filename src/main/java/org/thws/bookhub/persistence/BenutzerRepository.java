@@ -9,7 +9,7 @@ import org.thws.bookhub.domain.model.Benutzer;
 
 @Repository
 public interface BenutzerRepository extends JpaRepository<Benutzer, Long>{
-    Page<Benutzer> findAllBy(Pageable pageable);
+    Page<Benutzer> findAll(Pageable pageable);
 
     Page<Benutzer> findByName(String name, Pageable pageable);
 

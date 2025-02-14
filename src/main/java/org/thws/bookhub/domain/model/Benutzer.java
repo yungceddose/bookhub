@@ -15,7 +15,7 @@ public class Benutzer {
     private String email;
 
     @OneToMany(mappedBy = "benutzer")
-    @JsonManagedReference
+    @JsonManagedReference(value = "benutzer-bewertungen")
     private List<Bewertung> bewertungen = new ArrayList<>();
 
 
