@@ -61,6 +61,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.2.0</version> <!-- Aktuelle Version zum Zeitpunkt, kann variieren -->
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
